@@ -18,14 +18,14 @@ if(process.env.FRONTEND_URL){
     app.use(cors({
         origin: process.env.FRONTEND_URL,
         methods: ["GET","POST"],
-        allowedHeaders: ["Contennt-Type"]
+        allowedHeaders: ["Content-Type"]
     }));
 }
 
 //endpoint de bienvenida
 app.get("/", (req, res) => {
     res.json({
-        mensaje: "Bienvenido a la API, version 2",
+        mensaje: "Bienvenido a la API, version 3",
         entorno: NODE_ENV
     });
 });
@@ -69,9 +69,11 @@ app.post("/api/productos", (req,res) => {
 });
 
 //Ruta no encontrada
-app.use((req,res) => {
-    res.status(404).json({
-        error: "Ruta no encontrada"
+app.use((err, req, res, next) => {
+    console.error("Error", err.message);
+
+    res.status(err.status || 500).json({
+        error: "Error procesando la solicitud"
     });
 });
 
